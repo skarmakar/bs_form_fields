@@ -10,21 +10,8 @@ module BsFormFields
     end
 
     def render
-      case field_name
-      when :check_box
-        field_class = 'form-check-input'
-        label_class = 'form-check-label'
-      when :select
-        field_class = 'form-select'
-        label_class = 'form-label'
-      else
-        field_class = 'form-control'
-        label_class = 'form-label'
-      end
-
-      label_name = html_options[:label] || field_type.to_s.humanize
-      label_name << ' *' if html_options[:required]
-
+      label_class, field_class = label_and_field_class
+      
       # form label
       label = form.send(:label, field_name, label_name, class: label_class)
       
@@ -43,6 +30,34 @@ module BsFormFields
           #{field}
         </div>
       }.html_safe
+    end
+
+    private
+
+    def label_and_field_class
+      label_class, field_class = case field_name
+        when :check_box
+          ['form-check-label', 'form-check-input'] 
+        when :select
+          ['form-label', 'form-select'] 
+        else
+          ['form-label', 'form-control'] 
+      end
+
+      label_class << " #{html_options[:label_class]}" if html_options[:label_class]
+      field_class << " #{html_options[:field_class]}" if html_options[:field_class]
+
+      [label_class, field_class]
+    end
+
+    def label_name
+      if html_options.has_key?(:label) && !html_options[:label]
+        '&nbsp;'.html_safe
+      else
+        label = html_options[:label] || field_type.to_s.humanize
+        label << ' *' if html_options[:required]
+        label
+      end
     end
   end
 end
