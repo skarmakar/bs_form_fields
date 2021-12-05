@@ -1,8 +1,7 @@
 # BsFormFields
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bs_form_fields`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem provides extended form field methods to generate form labels and input fields following Bootstrap styling. Write less, and
+modify/switch easily.
 
 ## Installation
 
@@ -22,15 +21,47 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem simplifies writing the forms following bootstrap styling. Currently supporting bootstrap 5 only.
 
-## Development
+Configure the renderer in a initializer file like below:
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+# config/initializers/bs_form_fields.rb
+BsFormFields.renderer = :bootstrap_five
+```
+and use a `bs_` before all the field names like the example below:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```ruby
+<%= form_for :session, url: session_path do |form| %>
+  <%= f.bs_text_field :email, required: true, label: 'Username' %> # default label is field_name humanized a titleized
+  <%= f.bs_password_field :password, required: true %>
+  <%= f.bs_submit_button "Login" %>
+<% end %>
+
+```
+
+and this will generate html like below:
+
+```html
+<form action="/session" accept-charset="UTF-8" method="post">
+  <input name="utf8" type="hidden" value="✓">
+  <input type="hidden" name="authenticity_token" value="xxx">
+  
+  <div class="mb-3">
+    <label class="form-label" for="session_text_field">Username *</label>
+    <input required="required" label="Username *" class="form-control" type="text" name="session[email]" id="session_email">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="session_password_field">Password *</label>
+    <input required="required" class="form-control" type="password" name="session[password]" id="session_password">
+  </div>
+  
+  <button name="button" type="submit" class="btn btn-primary btn-lg">Login</button>
+</form>
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/bs_form_fields.
+Bug reports and pull requests are welcome on GitHub at https://github.com/skarmakar/bs_form_fields.
 

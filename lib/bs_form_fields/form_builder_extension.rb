@@ -13,19 +13,21 @@ ActionView::Helpers::FormBuilder.class_eval do
         method_name, field_type, html_options = args
       end
 
-      BsFormFields.renderer.classify.constantize.new(
+      BsFormFields.renderer_class.new(self, {
         method_name: method_name,
         field_type: field_type,
         options_for_select: options_for_select,
         options: options,
         html_options: html_options
-      ).render
+      }).render
     else
       super
     end
   end
 
-  def bs_submit_button(btn_text = 'Submit')
-    button btn_text, class: 'btn btn-primary btn-lg'
+  def bs_submit_button(btn_text = 'Submit', options = {})
+    css_class = 'btn '
+    css_class << (options[:class] ? options[:class] : 'btn-primary btn-lg')
+    button btn_text, class: css_class
   end
 end
