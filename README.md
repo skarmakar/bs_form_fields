@@ -32,10 +32,10 @@ BsFormFields.renderer = :bootstrap_five
 and use a `bs_` before all the field names like the example below:
 
 ```ruby
-<%= form_for :session, url: session_path do |form| %>
+<%= form_for :session, url: session_path do |f| %>
   <%= f.bs_text_field :email, required: true, label: 'Username' %> # default label is field_name humanized a titleized
   <%= f.bs_password_field :password, required: true %>
-  <%= f.bs_submit_button "Login" %>
+  <%= f.bs_submit_button "Login" %> # default is submit
 <% end %>
 
 ```
