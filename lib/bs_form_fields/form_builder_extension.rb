@@ -27,7 +27,7 @@ ActionView::Helpers::FormBuilder.class_eval do
 
   def bs_submit_button(btn_text = 'Submit', options = {})
     css_class = 'btn '
-    css_class << (options[:class] ? options[:class] : 'btn-primary btn-lg')
+    css_class << (options[:class] ? options[:class] : 'btn-primary')
     button btn_text, class: css_class
   end
 end

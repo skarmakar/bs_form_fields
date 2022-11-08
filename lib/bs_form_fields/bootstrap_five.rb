@@ -1,19 +1,20 @@
 module BsFormFields
   class BootstrapFive
-    attr_reader :form, :field_type, :options_for_select, :html_options, :field_name
+    attr_reader :form, :field_type, :options_for_select, :options, :html_options, :field_name
 
     def initialize(form, options = {})
       @form = form
       options.each { |key, val| instance_variable_set("@#{key}", val) }
       @html_options ||= {}
-      @field_name = @method_name.to_s.sub('bs_','').to_sym
+      @field_name = @method_name.to_s.sub('bs_', '').to_sym
     end
 
     def render
       label_class, field_class = label_and_field_class
       
       # form label
-      label = form.send(:label, field_name, label_name, class: label_class)
+      
+      label = form.send(:label, field_type, label_name, class: label_class)
       
       # form field
       field = if options_for_select
@@ -22,12 +23,14 @@ module BsFormFields
         form.send(field_name, field_type, html_options.merge(class: field_class))
       end
 
-      wrapper_class = field_name == :check_box ? 'form-check' : 'mb-3'
+      wrapper_class = field_name == :check_box ? 'form-check mb-3' : 'mb-3'
+      note_field = html_options[:note].present? ? "<small class='form-input-note text-info'>#{html_options[:note]}</small>" : ''
 
       %{
         <div class="#{wrapper_class}">
           #{label}
           #{field}
+          #{note_field}
         </div>
       }.html_safe
     end
